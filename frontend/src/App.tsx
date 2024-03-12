@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Penguin from "./assets/Penguin";
+import useApp from "./api/useApp";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    nofitCount,
+    quotes,
+    connect,
+    update,
+    connectToServer,
+    disconnetFromServer,
+  } = useApp();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container">
+      <a onClick={update}>
+        <Penguin number={nofitCount} showWelcome={!connect} />
+        {nofitCount > 0 && <strong>Click on me to update!</strong>}
+      </a>
+      {connect ? (
+        <button onClick={disconnetFromServer}>Enough!</button>
+      ) : (
+        <button onClick={connectToServer}>Say nice quotes!</button>
+      )}
+      {connect && (
+        <section className="list">
+          <h1>Quotes</h1>
+          <ul>
+            {quotes.length === 0 ? (
+              <>Wait for new quotes!</>
+            ) : (
+              quotes.map((item, index) => (
+                <li key={index}>
+                  <h5>{item.author} : </h5>
+                  <p>{item.quote}</p>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
