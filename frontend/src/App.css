@@ -17,6 +17,7 @@
 .list {
   max-height: 50vh;
   overflow: auto;
+  max-width: 500px;
 }
 
 .list ul li {

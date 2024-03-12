@@ -3,6 +3,8 @@ import { io } from "socket.io-client";
 
 import { Quote } from "../types";
 
+import Ringtone from "./message.mp3";
+
 const socket = io("http://localhost:8080", {
   autoConnect: false,
 });
@@ -39,8 +41,7 @@ export default function useApp() {
     socket.on("disconnect", () => {
       console.log("Client disconnected");
 
-      socket.emit("cancel_quotes");
-
+      setNofitCount(0);
       setConnect(false);
     });
 
@@ -49,12 +50,16 @@ export default function useApp() {
       console.log("Received data from server:", new_quotes);
 
       setQuotes((quotes) => [...new_quotes, ...quotes]);
+      setNofitCount(0);
     });
 
     // notify about new quote
-    socket.on("notify", () => {
-      console.log("Notification from server");
-      setNofitCount((count) => count + 1);
+    socket.on("notify", (data: number) => {
+      console.log("Notification from server: ", data);
+
+      setNofitCount(() => data);
+      const audio = new Audio(Ringtone);
+      audio.play();
     });
 
     return () => {

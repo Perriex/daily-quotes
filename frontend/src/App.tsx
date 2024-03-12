@@ -24,7 +24,7 @@ function App() {
       ) : (
         <button onClick={connectToServer}>Say nice quotes!</button>
       )}
-      {connect && (
+      {quotes && (
         <section className="list">
           <h1>Quotes</h1>
           <ul>
